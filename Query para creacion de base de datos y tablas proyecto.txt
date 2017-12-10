@@ -1,0 +1,49 @@
+create database Mail_Order
+go
+use Mail_Order
+
+create table Employees(EmployeeID int not null identity (1,1),
+		FirstName nvarchar (30) not null,
+		LastName nvarchar (30) not null,
+		ZipCode int,
+		Pass_user nvarchar (10)
+	constraint pk_EmployeeID primary key clustered(EmployeeID))
+go
+
+create table Customers(CustomerID int not null identity (1,1),
+		C_FirstName nvarchar (30) not null,
+		C_LastName nvarchar (30) not null,
+		C_ZipCode int
+	constraint pk_CustumerID primary key clustered (CustomerID) )
+go
+
+create table Parts (PartID int not null identity (1,1),
+		PartName nvarchar (50) not null,
+		Price money,
+		UnitStock smallint
+	constraint pk_PartID primary key clustered (PartID)  )
+
+go
+
+create table Orders(OrderID int not null identity (1,1),
+		OrderDate datetime, 
+		RequiredDate datetime,
+		ShippedDate datetime,
+		EmployeeID int,
+		CustomerID int,
+	constraint pk_OrderID primary key clustered (OrderID),
+	constraint fk_EmployeeID foreign key (EmployeeID) references Employees(EmployeeID))
+
+go
+
+create table OrdersDetails  (OrderID int not null,
+		PartID int not null, 
+		Unitprice money not null,
+		Quantity smallint not null,
+		Total money,
+	constraint pk_OrderID_PartID primary key clustered (OrderID,PartID),
+	constraint fk_OrderID foreign key(OrderID) references Orders(OrderID),
+	constraint fk_PartID foreign key (PartID) references Parts(PartID))
+
+
+
